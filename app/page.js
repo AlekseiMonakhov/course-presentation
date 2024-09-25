@@ -1,8 +1,32 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client"
+import { useState, useEffect } from 'react';
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from './page.module.css';
 
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -12,14 +36,32 @@ export default function Home() {
       </Head>
 
       <nav className={styles.nav}>
-        <ul>
-          <li><a href="#intro">Home</a></li>
-          <li><a href="#learn">What You'll Learn</a></li>
-          <li><a href="#structure">Course Structure</a></li>
-          <li><a href="#audience">Who It's For</a></li>
-          <li><a href="#duration">Duration</a></li>
-          <li><a href="#instructor">Instructor</a></li>
-        </ul>
+        {isMobile ? (
+          <>
+            <button className={styles.menuButton} onClick={toggleMenu}>
+              {isMenuOpen ? 'Close' : 'Menu'}
+            </button>
+            {isMenuOpen && (
+              <ul className={styles.mobileMenu}>
+                <li><a href="#intro" onClick={closeMenu}>Home</a></li>
+                <li><a href="#learn" onClick={closeMenu}>What You'll Learn</a></li>
+                <li><a href="#structure" onClick={closeMenu}>Course Structure</a></li>
+                <li><a href="#audience" onClick={closeMenu}>Who It's For</a></li>
+                <li><a href="#duration" onClick={closeMenu}>Duration</a></li>
+                <li><a href="#instructor" onClick={closeMenu}>Instructor</a></li>
+              </ul>
+            )}
+          </>
+        ) : (
+          <ul className={styles.desktopMenu}>
+            <li><a href="#intro">Home</a></li>
+            <li><a href="#learn">What You'll Learn</a></li>
+            <li><a href="#structure">Course Structure</a></li>
+            <li><a href="#audience">Who It's For</a></li>
+            <li><a href="#duration">Duration</a></li>
+            <li><a href="#instructor">Instructor</a></li>
+          </ul>
+        )}
       </nav>
 
       <section id="intro" className={styles.intro}>
@@ -134,6 +176,11 @@ export default function Home() {
             <p>Senior Full-Stack Software Engineer</p>
             <p>A Senior Software Developer with extensive experience in full-cycle web development, covering frontend, backend, databases, testing, deployment, and infrastructure. Has successfully worked with companies and projects across Russia, Europe, and the United States.</p>
             <p>Specializes in developing software for the crypto and banking sectors, web development, architecture solutions and system design. Currently specializes in AI integration and working with large language models.</p>
+            <h4>Contact Information</h4>
+            <ul className={styles.contactInfo}>
+              <li>Email: <a href="mailto:lexmonakhov@gmail.com">lexmonakhov@gmail.com</a></li>
+              <li>Phone: <a href="tel:+9779828008054">+977 9828008054</a></li>
+            </ul>
             <h4>Stack</h4>
             <ul>
               <li>Frontend: HTML, CSS, JavaScript, TypeScript, React, Next.js, Vue, Redux, Zustand, Webpack etc.</li>
